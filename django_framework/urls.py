@@ -18,11 +18,14 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from mainapp import views as mainapp
+from authapp import views as authapp
 
 urlpatterns = [
     path('', mainapp.main, name='main'),
     path('contact/', mainapp.contact, name='contact'),
     path('product/', include('mainapp.urls', namespace='mainapp')),
+
+    path('auth/', include('authapp.urls', namespace='auth')),
 
     path('admin/', admin.site.urls),
 ]
