@@ -14,4 +14,22 @@
             контакты
         </a>
     </li>
+    <li>
+        {% if user.is_authenticated %}
+            <a href="{% url 'auth:edit' %}">
+                {% if user.first_name %}
+                    {{ user.first_name }}
+                {% else %}
+                    пользователь
+                {% endif %}
+            </a>
+            <a href="{% url 'auth:logout' %}">
+                выход
+            </a>
+            {% else %}
+            <a href="{% url 'auth:login' %}">
+                вход
+            </a>
+        {% endif %}
+    </li>
 </ul>
