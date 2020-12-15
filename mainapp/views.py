@@ -1,23 +1,53 @@
+import random
+
 from django.shortcuts import render, get_object_or_404
 
 from basketapp.models import Basket
 from mainapp.models import Product, ProductCategory
 
 
+def get_basket(user):
+    if user.is_authenticated:
+        return Basket.objects.filter(user=user)
+    return []
+
+
+def get_hot_product():
+    product_list = Product.objects.all()
+    return random.sample(list(product_list), 1)[0]
+
+
+def get_same_products(hot_product):
+    return Product.objects.filter(category__pk=hot_product.category.pk).exclude(pk=hot_product.pk)[:3]
+
+
 def main(request):
     products = Product.objects.all()[:3]
     content = {
         'title': 'Главная',
-        'products': products
+        'products': products,
+        'basket': get_basket(request.user)
     }
     return render(request, 'mainapp/index.html', content)
 
 
 def contact(request):
     content = {
-        'title': 'Контакты'
+        'title': 'Контакты',
+        'basket': get_basket(request.user)
     }
     return render(request, 'mainapp/contact.html', content)
+
+
+def prod(request, pk):
+    title = 'продукты'
+    content = {
+        'title': title,
+        'links_menu': ProductCategory.objects.all(),
+        'product': get_object_or_404(Product, pk=pk),
+        'basket': get_basket(request.user)
+    }
+    return render(request, 'mainapp/product.html', content)
 
 
 def product(request, pk=None):
@@ -45,12 +75,15 @@ def product(request, pk=None):
         }
         return render(request, 'mainapp/products_list.html', content)
 
-    same_products = Product.objects.all()[2:5]
+    hot_product = get_hot_product()
+    same_products = get_same_products(hot_product)
+
     content = {
         'title': 'Продукты',
         'links_menu': links_menu,
         'same_products': same_products,
-        'basket': basket
+        'basket': basket,
+        'hot_product': hot_product
     }
     return render(request, 'mainapp/products.html', content)
 
