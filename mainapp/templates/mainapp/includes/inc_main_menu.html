@@ -23,6 +23,13 @@
                     пользователь
                 {% endif %}
             </a>
+            {% if user.is_superuser %}
+               <li>
+               <a href="{% url 'admin:users' %}">
+                   админка
+               </a>
+                </li>
+            {% endif %}
             <a href="{% url 'auth:logout' %}">
                 выход
             </a>
@@ -31,7 +38,9 @@
                 вход
             </a>
         {% endif %}
+
     </li>
+
 </ul>
 <a href="#" class="search"></a>
 <a href="{% url 'basket:view' %}" class="basket">
