@@ -7,12 +7,6 @@ from basketapp.models import Basket
 from mainapp.models import Product, ProductCategory
 
 
-def get_basket(user):
-    if user.is_authenticated:
-        return Basket.objects.filter(user=user)
-    return []
-
-
 def get_hot_product():
     product_list = Product.objects.all()
     return random.sample(list(product_list), 1)[0]
@@ -26,16 +20,14 @@ def main(request):
     products = Product.objects.all()[:3]
     content = {
         'title': 'Главная',
-        'products': products,
-        'basket': get_basket(request.user)
+        'products': products
     }
     return render(request, 'mainapp/index.html', content)
 
 
 def contact(request):
     content = {
-        'title': 'Контакты',
-        'basket': get_basket(request.user)
+        'title': 'Контакты'
     }
     return render(request, 'mainapp/contact.html', content)
 
@@ -45,8 +37,7 @@ def prod(request, pk):
     content = {
         'title': title,
         'links_menu': ProductCategory.objects.all(),
-        'product': get_object_or_404(Product, pk=pk),
-        'basket': get_basket(request.user)
+        'product': get_object_or_404(Product, pk=pk)
     }
     return render(request, 'mainapp/product.html', content)
 
