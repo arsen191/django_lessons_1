@@ -24,13 +24,11 @@ urlpatterns = [
     path('', mainapp.main, name='main'),
     path('contact/', mainapp.contact, name='contact'),
     path('product/', include('mainapp.urls', namespace='mainapp')),
-
     path('auth/', include('authapp.urls', namespace='auth')),
     path('basket/', include('basketapp.urls', namespace='basket')),
-
     path('', include('social_django.urls', namespace='social')),
-
-    path('admin/', include('adminapp.urls', namespace='admin'))
+    path('admin/', include('adminapp.urls', namespace='admin')),
+    path('order/', include('orderapp.urls', namespace='order')),
     # path('admin/', admin.site.urls),
 ]
 
