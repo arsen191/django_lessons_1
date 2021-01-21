@@ -47,7 +47,7 @@ def product(request, pk=None, page=1):
 
     basket = []
     if request.user.is_authenticated:
-        basket = Basket.objects.filter(user=request.user)
+        basket = Basket.objects.filter(user=request.user).select_related()
 
     if pk is not None:
         if pk == 0:
