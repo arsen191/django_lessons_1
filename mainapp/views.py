@@ -13,11 +13,11 @@ def get_hot_product():
 
 
 def get_same_products(hot_product):
-    return Product.objects.filter(category__pk=hot_product.category.pk).exclude(pk=hot_product.pk)[:3]
+    return Product.objects.filter(category__pk=hot_product.category.pk).exclude(pk=hot_product.pk)[:3].select_related()
 
 
 def main(request):
-    products = Product.objects.all()[:3]
+    products = Product.objects.all()[:3].select_related()
     content = {
         'title': 'Главная',
         'products': products
@@ -47,7 +47,7 @@ def product(request, pk=None, page=1):
 
     basket = []
     if request.user.is_authenticated:
-        basket = Basket.objects.filter(user=request.user)
+        basket = Basket.objects.filter(user=request.user).select_related()
 
     if pk is not None:
         if pk == 0:
@@ -85,4 +85,3 @@ def product(request, pk=None, page=1):
         'hot_product': hot_product
     }
     return render(request, 'mainapp/products.html', content)
-
