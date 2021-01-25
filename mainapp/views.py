@@ -9,15 +9,15 @@ from basketapp.models import Basket
 from mainapp.models import Product, ProductCategory
 
 
-def get_links_menu():
-    if settings.LOW_CACHE:
-        key = 'links_menu'
-        links_menu = cache.get(key)
-        if links_menu is None:
-            links_menu = ProductCategory.objects.filter(is_active=True)
-            cache.set(key, links_menu)
-    else:
-        return ProductCategory.objects.filter(is_active=True)
+# def get_links_menu():
+#     if settings.LOW_CACHE:
+#         key = 'links_menu'
+#         links_menu = cache.get(key)
+#         if links_menu is None:
+#             links_menu = ProductCategory.objects.filter(is_active=True)
+#             cache.set(key, links_menu)
+#     else:
+#         return ProductCategory.objects.filter(is_active=True)
 
 
 def get_hot_product():
@@ -56,7 +56,7 @@ def prod(request, pk):
 
 
 def product(request, pk=None, page=1):
-    links_menu = get_links_menu()
+    links_menu = ProductCategory.objects.filter(is_active=True)
 
     basket = []
     if request.user.is_authenticated:
