@@ -8,6 +8,7 @@ from django.shortcuts import render, get_object_or_404
 from basketapp.models import Basket
 from mainapp.models import Product, ProductCategory
 
+
 def get_links_menu():
     if settings.LOW_CACHE:
         key = 'links_menu'
@@ -17,6 +18,7 @@ def get_links_menu():
             cache.set(key, links_menu)
     else:
         return ProductCategory.objects.filter(is_active=True)
+
 
 def get_hot_product():
     product_list = Product.objects.all()

@@ -151,7 +151,7 @@ AUTH_USER_MODEL = 'authapp.ShopUser'
 
 CACHE_MIDDLEWARE_ALIAS = 'default'
 CACHE_MIDDLEWARE_SECONDS = 120
-CACHE_MIDDLEWARE_KEY_PREFIX = 'geekshop'
+CACHE_MIDDLEWARE_KEY_PREFIX = 'django_framework'
 
 CACHES = {
     'default': {
