@@ -38,14 +38,11 @@
                                {% else %}
                                     {{ field }}
                                {% endif %}
-                           {% else %}
                                {% if field.value %}
                                <span class="orderitems-{{ forloop.parentloop.counter0 }}-price">
                                {{ field.value }}
                                </span>
                                {% endif %}
-                           {% else %}
-                               {{ field }}
                            {% endif %}
                            </td>
                        {% endfor %}
