@@ -69,6 +69,7 @@ def prod(request, pk):
     return render(request, 'mainapp/product.html', content)
 
 
+@cache_page(3600)
 def product(request, pk=None, page=1):
     links_menu = get_links_menu()
 
