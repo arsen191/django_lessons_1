@@ -5,9 +5,7 @@
 {% block content %}
   <div class="users_list">
     <button class="new_user">
-      <a href={% url 'adminapp:user_create' %}>
-        новый пользователь
-      </a>
+      <a href={% url 'adminapp:user_create' %}>новый пользователь</a>
     </button>
     {% for object in object_list %}
       <div class="user_record {% if not object.is_active %}not_active{% endif %}">
@@ -19,16 +17,14 @@
             пользователь
           {% endif %}
           <button>
-            <a href={% url 'adminapp:user_update' object.pk %}>
-              редактировать
-            </a>
+            <a href={% url 'adminapp:user_update' object.pk %}>редактировать</a>
           </button>
           <button>
             <a href='{% url 'admin:user_delete' object.pk %}'>
                 {% if object.is_active %}
-              удалить
+                    удалить
                 {% else %}
-                восстановить
+                    восстановить
                 {% endif %}
             </a>
           </button>

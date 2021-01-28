@@ -35,7 +35,7 @@ def get_category(pk):
 
 
 def get_hot_product():
-    product_list = Product.objects.all()
+    product_list = Product.objects.filter(category__is_active=True, is_active=True)
     return random.sample(list(product_list), 1)[0]
 
 
@@ -69,7 +69,7 @@ def prod(request, pk):
     return render(request, 'mainapp/product.html', content)
 
 
-@cache_page(3600)
+# @cache_page(3600)
 def product(request, pk=None, page=1):
     links_menu = get_links_menu()
 

@@ -18,7 +18,7 @@
         <div class="details-products">
             <div class="details-slider">
                 <div class="slider-product">
-                    <img src="/media/{{ product.image }}" alt="{{ product.short_desc }}">
+                    <img src="/media/{{ product.image }}" alt="{{ product.short_desc }}" width="370px">
                 </div>
                 <div class="slider-control">
                     <div class="block">
@@ -50,9 +50,15 @@
                 <div class="description-text">
                     {{ product.description }}
                 </div>
+                <div class="description-text">
+                    {% if product.quantity < 10 %}
+                        Поспеши! На складе осталось всего: {{ product.quantity }}шт.
+                    {% else %}
+                        На складе: {{ product.quantity }}шт.
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="clr"></div>
 {% endblock %}
