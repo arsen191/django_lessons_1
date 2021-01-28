@@ -21,7 +21,6 @@
     border-radius: 25px;
 }
 
-
 button.last {
     margin-bottom: 10px;
 }
@@ -418,6 +417,12 @@ html, body {
     margin-top: 10px;
 }
 
+.form-horizontal {
+    margin-left: auto;
+    margin-right: auto;
+    width: 500px;
+}
+
 .admin_menu {
     display: block;
     left: 15px;
@@ -581,9 +586,11 @@ html, body {
 .category-products {
 	margin-bottom: 75px;
 }
+
 .category-products .block a img {
 	float: left;
 }
+
 .category-products .block {
 	float: left;
 	margin-right: 30px;
@@ -1231,8 +1238,8 @@ html, body {
 	height: 384px;
 	width: 1169px;
 	background-color: #f7f7f7;
-	padding-left: 99px;
-	padding-right: 98px;
+	padding-left: 40px;
+	padding-right: 40px;
 	margin: -384px auto 0;
 	clear: both;
 }
@@ -1253,7 +1260,7 @@ html, body {
 	margin-top: 120px;
 	width: 221px;
 	float: left;
-	margin-right: 68px;
+	margin-right: 20px;
 }
 .text-footer:last-child {
 	margin-right: 0;
@@ -1404,7 +1411,7 @@ td:first-child {
 	height: 368px;
 	width: 368px;
 	border: 1px solid #9c9c9c;
-	margin: 71px 28px 122px 0px;
+	margin: 71px 15px 122px 0px;
 	float: left;
 }
 .location-1:last-child {
@@ -1720,7 +1727,7 @@ td:first-child {
 }
 .related-products .block {
 	float: left;
-	margin-right: 30px;
+	margin-right: 10px;
 	display: block;
 	height: 370px;
 	width: 370px;
@@ -1752,11 +1759,11 @@ td:first-child {
 	font-size: 20px;
 	font-weight: 300;
 	text-align: center;
-	margin: 15px 15px;
+	/*margin: 15px 15px;*/
 }
 .related-products a .text img {
 	float: none;
-	margin-top: 80px;
+	margin-top: 40px;
 }
 .related-products a:hover .text{
 	display: block;

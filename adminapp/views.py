@@ -1,4 +1,8 @@
 from django.contrib.auth.decorators import user_passes_test
+from django.db import connection
+from django.db.models import F
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse, reverse_lazy
@@ -62,6 +66,23 @@ class UserDeleteView(DeleteView):
 
 
 # categories
+def db_profile_by_type(prefix, type, queries):
+    update_queries = list(filter(lambda x: type in x['sql'], queries))
+    print(f'db_profile {type} for {prefix}')
+    [print(query['sql']) for query in update_queries]
+
+
+@receiver(pre_save, sender=ProductCategory)
+def product_is_active_update_productcategory_save(sender, instance, **kwargs):
+    if instance.pk:
+        if instance.is_active:
+            instance.product_set.update(is_active=True)
+        else:
+            instance.product_set.update(is_active=False)
+
+        db_profile_by_type(sender, 'UPDATE', connection.queries)
+
+
 class ProductCategoryCreateView(CreateView):
     model = ProductCategory
     template_name = 'adminapp/category_update.html'
@@ -97,6 +118,16 @@ class ProductCategoryUpdateView(UpdateView):
         context['title'] = 'категории/редактирование'
         return context
 
+    def form_valid(self, form):
+        if 'discount' in form.cleaned_data:
+            discount = form.cleaned_data['discount']
+            if discount:
+                print(f'скидка {discount}% распространяется к товарам категории {self.object.name}')
+                self.object.product_set.update(price=F('price') * (1 - discount / 100))
+                db_profile_by_type(self.__class__, 'UPDATE', connection.queries)
+
+        return super().form_valid(form)
+
 
 class ProductCategoryDeleteView(DeleteView):
     model = ProductCategory
@@ -118,11 +149,9 @@ class ProductCategoryDeleteView(DeleteView):
 
 
 # products
-
 class ProductCreateView(CreateView):
     model = Product
     template_name = 'adminapp/product_update.html'
-    success_url = reverse_lazy('adminapp:products')
     form_class = ProductEditForm
 
     @method_decorator(user_passes_test(lambda user: user.is_superuser))
@@ -134,6 +163,11 @@ class ProductCreateView(CreateView):
         context['category'] = ProductCategory.objects.get(pk=self.kwargs['pk'])
         return context
 
+    def get_success_url(self):
+        category_pk = self.kwargs['pk']
+        success_url = reverse('adminapp:products', args=[category_pk])
+        return success_url
+
 
 class ProductsView(ListView):
     model = Product
@@ -143,11 +177,18 @@ class ProductsView(ListView):
     def dispatch(self, *args, **kwargs):
         return super().dispatch(*args, **kwargs)
 
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['category'] = ProductCategory.objects.get(pk=self.kwargs['pk'])
-        context['object_list'] = Product.objects.filter(category=self.kwargs['pk'])
-        return context
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        print(self.kwargs)
+        category_pk = self.kwargs['pk']
+        return queryset.filter(category__pk=category_pk)
+
+    def get_context_data(self, *args, **kwargs):
+        context_data = super().get_context_data(*args, **kwargs)
+        category_pk = self.kwargs['pk']
+        product_item = get_object_or_404(ProductCategory, pk=category_pk)
+        context_data['category'] = product_item
+        return context_data
 
 
 class ProductDetailView(DetailView):
@@ -163,16 +204,21 @@ class ProductUpdateView(UpdateView):
     model = Product
     template_name = 'adminapp/product_update.html'
     form_class = ProductEditForm
-    success_url = reverse_lazy('adminapp:products')
 
     @method_decorator(user_passes_test(lambda user: user.is_superuser))
     def dispatch(self, *args, **kwargs):
-        return super(ProductUpdateView, self).dispatch(*args, **kwargs)
+        return super().dispatch(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['category'] = getattr(Product.objects.get(id=self.kwargs['pk']), 'category')
+        context['category'] = Product.objects.get(id=self.kwargs['pk'])
         return context
+
+    def get_success_url(self):
+        product_pk = self.kwargs['pk']
+        product = get_object_or_404(Product, id=product_pk)
+        success_url = reverse('adminapp:products', args=[product.category_id])
+        return success_url
 
 
 # class ProductDeleteView(DeleteView):

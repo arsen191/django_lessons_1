@@ -23,7 +23,7 @@ class OrderListView(ListView):
 
     @method_decorator(login_required())
     def dispatch(self, *args, **kwargs):
-        return super(ListView, self).dispatch(*args, **kwargs)
+        return super().dispatch(*args, **kwargs)
 
 
 class OrderCreateView(CreateView):
@@ -71,13 +71,17 @@ class OrderCreateView(CreateView):
 
     @method_decorator(login_required())
     def dispatch(self, *args, **kwargs):
-        return super(CreateView, self).dispatch(*args, **kwargs)
+        return super().dispatch(*args, **kwargs)
 
 
 class OrderUpdateView(UpdateView):
     model = Order
     fields = []
     success_url = reverse_lazy('order:orders_list')
+
+    @method_decorator(login_required())
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
@@ -86,7 +90,8 @@ class OrderUpdateView(UpdateView):
         if self.request.POST:
             formset = OrderFormSet(self.request.POST, instance=self.object)
             for form in formset.forms:
-                form.initial['price'] = form.instance.product.price
+                if form.instance.pk:
+                    form.initial['price'] = form.instance.product.price
             data['orderitems'] = formset
         else:
             formset = OrderFormSet(instance=self.object)
@@ -112,17 +117,13 @@ class OrderUpdateView(UpdateView):
 
         return super().form_valid(form)
 
-    @method_decorator(login_required())
-    def dispatch(self, *args, **kwargs):
-        return super(UpdateView, self).dispatch(*args, **kwargs)
-
 
 class OrderDetailView(DetailView):
     model = Order
 
     @method_decorator(login_required())
     def dispatch(self, *args, **kwargs):
-        return super(DetailView, self).dispatch(*args, **kwargs)
+        return super().dispatch(*args, **kwargs)
 
 
 class OrderDeleteView(DeleteView):
