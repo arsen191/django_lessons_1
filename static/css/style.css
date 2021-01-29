@@ -685,7 +685,7 @@ html, body {
 
 .login div.user_avatar {
     position: fixed;
-    left: 175px;
+    left: 100px;
     top: 200px;
 }
 
@@ -706,8 +706,8 @@ html, body {
 
 .slider {
 	height: 800px;
-	background-image: url(/static/img/slider.jpg); 
-	/*padding-left: 98px;*/
+	background-image: url(/static/img/mebel_divan_stol_vaza_stil_interer_68103_1920x1080.jpg);
+    background-size: cover;
 	padding-left: 78px;
 	padding-right: 211px;
 	position: relative;
@@ -730,7 +730,7 @@ html, body {
 	float: left;
 }
 .menu a {
-	color: #8c8c8c;
+	color: #555;
 	font-size: 14px;
 	font-weight: 700;
 	text-align: right;
